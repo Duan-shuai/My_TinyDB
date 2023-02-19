@@ -1,0 +1,42 @@
+add_executable(DB
+        app.cpp)
+add_library(parser
+        STATIC
+        parser.cpp)
+add_library(storage
+        STATIC
+        disk_manager.cpp
+        table.cpp
+        database.cpp
+        bpt.cpp)
+add_library(executor
+        STATIC
+        executor.cpp)
+add_library(server
+        STATIC
+        server.cpp
+        database.cpp)
+target_link_libraries(
+        server
+        parser
+        executor
+)
+target_link_libraries(
+        executor
+        storage
+        parser
+)
+
+set(DB_LIB
+        parser
+        storage
+        executor
+        server)
+set_target_properties(DB
+        PROPERTIES
+        EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+target_link_libraries(
+        DB
+        ${DB_LIB}
+)
